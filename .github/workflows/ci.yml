@@ -8,6 +8,7 @@ on:
 jobs:
   docker-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -17,13 +18,16 @@ jobs:
 
       - name: Build Docker Image
         run: |
+          owner_lc=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           docker build \
-            -t ghcr.io/${{ github.repository_owner }}/devops:latest \
-            -t ghcr.io/${{ github.repository_owner }}/devops:${{ github.sha }} \
+            -t ghcr.io/$owner_lc/devops:latest \
+            -t ghcr.io/$owner_lc/devops:${{ github.sha }} \
             --label "org.opencontainers.image.source=${{ github.repository }}" \
             .
 
       - name: Push Docker Images
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/devops:latest
-          docker push ghcr.io/${{ github.repository_owner }}/devops:${{ github.sha }}
+          owner_lc=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          docker push ghcr.io/$owner_lc/devops:latest
+          docker push ghcr.io/$owner_lc/devops:${{ github.sha }}
+
