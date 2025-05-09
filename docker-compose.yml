@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: web_app
+    ports:
+      - "8080:80"
+    networks:
+      project_mynet:
+        aliases:
+          - webhost
+    restart: unless-stopped
+
+  hello:
+    image: nginxdemos/hello
+    container_name: hello_service
+    ports:
+      - "8081:80"
+    networks:
+      project_mynet:
+        aliases:
+          - hellohost
+    restart: unless-stopped
+
+networks:
+  project_mynet:
+    driver: bridge  
+
